@@ -2,7 +2,7 @@ echo "Starting Update"
 #ensure variables are clear
 unset uptime_tags
 unset version
-unset versionconfirm
+unset versionchoice
 
 (
 #move to uptime-kuma install directory
