@@ -17,7 +17,7 @@ unset versionconfirm
         printf "%s\n" "${uptime_tags[@]:total-10:10}"
         read -p "Enter the version tag: " version
 #Check version is the version the user wanted
-        read -n 1 -p "You chose: $version, this correct? " versionchoice
+        read -n 1 -p "You chose: $version, this correct? Please type Y to continue." versionchoice
 
         echo ""
 
@@ -30,7 +30,7 @@ unset versionconfirm
         echo "Running git checkout"
 #only run git checkout if a valid version is chosen. Ensure to put () around expression or SSH session will be terminated
                 (
-                git checkout 2.1.12 || { echo "Checkout failed!"; exit 1; }
+                git checkout $version || { echo "Checkout failed!"; exit 1; }
                 )
 #Run NPM install and run download-dist
         echo "Running NPM Update"
@@ -42,4 +42,9 @@ unset versionconfirm
                 npm run build || { echo "NPM Build Failed!"; exit 1; }
                 )
         echo "Update Complete"
+        echo "Restarting Service"
+        (
+                pm2 restart uptime-kuma || { echo "Service restart failed!"; exit 1; }
+        )
+        echo "Service Restarted"
 )
